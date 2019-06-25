@@ -26,7 +26,7 @@
        <input type="submit" name="load_data" value="Load Data" />
  </form>
  <?php
-    $host = "dicodingapp.database.windows.net";
+    $host = "tcp:dicodingapp.database.windows.net,1433";
     $user = "angelwidjaja";
     $pass = ".A12345a.";
     $db = "dicodingdb";
@@ -43,7 +43,7 @@
             $email = $_POST['email'];
             $date = date("Y-m-d");
             // Insert data
-            $sql_insert = "INSERT INTO Registration (name, phone, email, date) 
+            $sql_insert = "INSERT INTO dbo.Users (name, phone, email, date) 
                         VALUES (?,?,?,?)";
             $stmt = $conn->prepare($sql_insert);
             $stmt->bindValue(1, $name);
