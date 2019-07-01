@@ -136,6 +136,6 @@ $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
         <br><br>
         <img id="sourceImage" width="400" />
     </div>
-</div>
-  </body>
+  </div>
+</body>
 </html>
