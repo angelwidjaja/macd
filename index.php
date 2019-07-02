@@ -1,138 +1,82 @@
-<?php
-require_once 'vendor/autoload.php';
-require_once "./random_string.php";
-use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
-use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
-use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
-$connectionString = "DefaultEndpointsProtocol=https;AccountName=".getenv('webappdicoding').";AccountKey=".getenv('zyRWRJXkv/O8qC2Dj4OBFAYL33oB9nRic+tkw6VVoie+AB9Zt+syx5AHZflMKgzfF3DWZIlrxazr5gDKA48yYQ==');
-$containerName = "image";
-
-$blobClient = BlobRestProxy::createBlobService($connectionString);
-
-try {
-  $createContainerOptions = new CreateContainerOptions();
-  $createContainerOptions->setPublicAccess(PublicAccessType::CONTAINER_AND_BLOBS);
-  $createContainerOptions->addMetaData("key1", "value1");
-  $createContainerOptions->addMetaData("key2", "value2");
-  $blobClient->createContainer($containerName, $createContainerOptions);
-} catch(ServiceException $e){
-      
-    }
-    catch(InvalidArgumentTypeException $e){
-     
-    }
-
-
-if (isset($_POST['submit'])) {
-	$fileToUpload = strtolower($_FILES["fileToUpload"]["name"]);
-	$content = fopen($_FILES["fileToUpload"]["tmp_name"], "r");
-	$blobClient->createBlockBlob($containerName, $fileToUpload, $content);
-	header("Location: index.php");
-}
-$listBlobsOptions = new ListBlobsOptions();
-$listBlobsOptions->setPrefix("");
-$result = $blobClient->listBlobs($containerName, $listBlobsOptions);
-?>
-
-<!DOCTYPE html>
 <html>
  <head>
-    <title>Submission</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  </head>
-  <body>
-    <h1> Analisa Gambar</h1>
-    <div class="mt-4 mb-2">
-      <form action="index.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="fileToUpload" accept=".jpeg,.jpg,.png">
-        <input type="submit" name="submit" value="Upload">
-      </form>
-    </div>
-    <br>
-    <table class='table table-hover'>
-      <thead>
-        <tr>
-	  <th>File URL</th>
-	  <th>Action</th>
-	 </tr>
-      </thead>
-      <tbody>
-<script type="text/javascript">
-    function processImage(sourceImageUrl) {
-
-        var subscriptionKey = "4218041b49374ddeab1bd6a7c5fb6096";
- 
-        var uriBase =
-            "https://southeastasia.api.cognitive.microsoft.com/vision/v2.0/analyze";
- 
-        var params = {
-            "visualFeatures": "Categories,Description,Color",
-            "details": "",
-            "language": "en",
-        };
- 	
-        document.querySelector("#sourceImage").src = sourceImageUrl;
- 
-        $.ajax({
-            url: uriBase + "?" + $.param(params),
- 
-            beforeSend: function(xhrObj){
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader(
-                    "Ocp-Apim-Subscription-Key", subscriptionKey);
-            },
- 
-            type: "POST",
- 
-            data: '{"url": ' + '"' + sourceImageUrl + '"}',
-        })
- 
-        .done(function(data) {
-            $("#responseTextArea").val(JSON.stringify(data, null, 2));
-        })
- 
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            var errorString = (errorThrown === "") ? "Error. " :
-                errorThrown + " (" + jqXHR.status + "): ";
-            errorString += (jqXHR.responseText === "") ? "" :
-                jQuery.parseJSON(jqXHR.responseText).message;
-            alert(errorString);
-        });
-    };
-</script>
-        <?php
-	  do {
-	    foreach ($result->getBlobs() as $blob)
-	      {
-		?>
-		<tr>
-		  <td><?php echo $blob->getUrl() ?></td>
-		  <td>
-		    <button onclick="processImage('<?php echo $blob->getUrl() ?>')">Analisa</button>
-		  </td>
-		</tr>
-		<?php
-	      }
-	    $listBlobsOptions->setContinuationToken($result->getContinuationToken());
-	  } while($result->getContinuationToken());
-	?>
-      </tbody>
-    </table>
-    <br><br>
-    <div id="wrapper" style="width:1020px; display:table;">
-    <div id="jsonOutput" style="width:600px; display:table-cell;">
-        Response:
-        <br><br>
-        <textarea id="responseTextArea" class="UIInput"
-                  style="width:580px; height:400px;"></textarea>
-    </div>
-    <div id="imageDiv" style="width:420px; display:table-cell;">
-        Source image:
-        <br><br>
-        <img id="sourceImage" width="400" />
-    </div>
-</div>
-  </body>
+ <Title>Registration Form</Title>
+ <style type="text/css">
+ 	body { background-color: #fff; border-top: solid 10px #000;
+ 	    color: #333; font-size: .85em; margin: 20; padding: 20;
+ 	    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+ 	}
+ 	h1, h2, h3,{ color: #000; margin-bottom: 0; padding-bottom: 0; }
+ 	h1 { font-size: 2em; }
+ 	h2 { font-size: 1.75em; }
+ 	h3 { font-size: 1.2em; }
+ 	table { margin-top: 0.75em; }
+ 	th { font-size: 1.2em; text-align: left; border: none; padding-left: 0; }
+ 	td { padding: 0.25em 2em 0.25em 0em; border: 0 none; }
+ </style>
+ </head>
+ <body>
+ <h1>Register here!</h1>
+ <p>Fill in your name, phone and email, then click <strong>Submit</strong> to register.</p>
+ <form method="post" action="index.php" enctype="multipart/form-data" >
+       Name  <input type="text" name="name" id="name"/></br></br>
+       Phone <input type="text" name="phone" id="phone"/></br></br>
+       Email <input type="text" name="email" id="email"/></br></br>
+       <input type="submit" name="submit" value="Submit" />
+       <input type="submit" name="load_data" value="Load Data" />
+ </form>
+ <?php
+    $host = "tcp:dicodingapp.database.windows.net,1433";
+    $user = "angelwidjaja";
+    $pass = ".A12345a.";
+    $db = "dicodingdb";
+    try {
+        $conn = new PDO("sqlsrv:server = $host; Database = $db", $user, $pass);
+        $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+    } catch(Exception $e) {
+        echo "Failed: " . $e;
+    }
+    if (isset($_POST['submit'])) {
+        try {
+            $name = $_POST['name'];
+            $phone = $_POST['phone'];
+            $email = $_POST['email'];
+            // Insert data
+            $sql_insert = "INSERT INTO Users (name, phone, email) 
+                        VALUES (?,?,?)";
+            $stmt = $conn->prepare($sql_insert);
+            $stmt->bindValue(1, $name);
+            $stmt->bindValue(2, $phone);
+            $stmt->bindValue(3, $email);
+            $stmt->execute();
+        } catch(Exception $e) {
+            echo "Failed: " . $e;
+        }
+        echo "<h3>Your're registered!</h3>";
+    } else if (isset($_POST['load_data'])) {
+        try {
+            $sql_select = "SELECT * FROM Users";
+            $stmt = $conn->query($sql_select);
+            $registrants = $stmt->fetchAll(); 
+            if(count($registrants) > 0) {
+                echo "<h2>People who are registered:</h2>";
+                echo "<table>";
+                echo "<tr><th>Name</th>";
+                echo "<th>Phone</th>";
+                echo "<th>Email</th>";
+                foreach($registrants as $registrant) {
+                    echo "<tr><td>".$registrant['name']."</td>";
+                    echo "<td>".$registrant['phone']."</td>";
+                    echo "<td>".$registrant['email']."</td>";
+                }
+                echo "</table>";
+            } else {
+                echo "<h3>No one is currently registered.</h3>";
+            }
+        } catch(Exception $e) {
+            echo "Failed: " . $e;
+        }
+    }
+ ?>
+ </body>
 </html>
