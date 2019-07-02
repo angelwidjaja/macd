@@ -83,7 +83,7 @@ abstract class ServiceSettings
 
         $tokenizedSettings = ConnectionStringParser::parseConnectionString(
             'connectionString',
-            'DefaultEndpointsProtocol=https;AccountName=webappdicoding;AccountKey=zyRWRJXkv/O8qC2Dj4OBFAYL33oB9nRic+tkw6VVoie+AB9Zt+syx5AHZflMKgzfF3DWZIlrxazr5gDKA48yYQ==;EndpointSuffix=core.windows.net'
+            ''
         );
 
         // Assure that all given keys are valid.
