@@ -9,7 +9,6 @@ use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=".getenv('webappdicoding').";AccountKey=".getenv('zyRWRJXkv/O8qC2Dj4OBFAYL33oB9nRic+tkw6VVoie+AB9Zt+syx5AHZflMKgzfF3DWZIlrxazr5gDKA48yYQ==');
 $containerName = "image";
 
-// Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
 try {
